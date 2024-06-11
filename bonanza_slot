@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Slot Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            justify-content: center;
+        }
+
+        .slot-machine {
+            border: 2px solid #000;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .reels {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .reel {
+            font-size: 2em;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+            background-color: #ddd;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .controls input {
+            width: 50px;
+            text-align: center;
+        }
+
+        .controls button {
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .controls button:disabled {
+            background-color: #ccc;
+        }
+
+        .manual-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .manual-controls select {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slot-machine">
+        <h1>Slot Game</h1>
+        <div class="reels">
+            <div class="reel" id="reel1">🍒</div>
+            <div class="reel" id="reel2">🍋</div>
+            <div class="reel" id="reel3">🍉</div>
+        </div>
+        <div class="controls">
+            <button id="spinButton">SPIN</button>
+            <div>
+                <label for="bet">Bet: </label>
+                <input type="number" id="bet" value="10" min="1" />
+            </div>
+            <div>
+                <label for="balance">Balance: </label>
+                <input type="number" id="balance" value="100" readonly />
+            </div>
+        </div>
+        <div class="manual-controls">
+            <h2>Manual Win Settings</h2>
+            <select id="manualReel1">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel2">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel3">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        const symbols = ['🍒', '🍋', '🍉', '🍇', '🍓'];
+        const reel1 = document.getElementById('reel1');
+        const reel2 = document.getElementById('reel2');
+        const reel3 = document.getElementById('reel3');
+        const spinButton = document.getElementById('spinButton');
+        const betInput = document.getElementById('bet');
+        const balanceInput = document.getElementById('balance');
+
+        const manualReel1 = document.getElementById('manualReel1');
+        const manualReel2 = document.getElementById('manualReel2');
+        const manualReel3 = document.getElementById('manualReel3');
+
+        function getRandomSymbol() {
+            return symbols[Math.floor(Math.random() * symbols.length)];
+        }
+
+        function spinReels() {
+            const bet = parseInt(betInput.value);
+            let balance = parseInt(balanceInput.value);
+
+            if (balance < bet) {
+                alert('Not enough balance!');
+                return;
+            }
+
+            reel1.textContent = manualReel1.value === 'random' ? getRandomSymbol() : manualReel1.value;
+            reel2.textContent = manualReel2.value === 'random' ? getRandomSymbol() : manualReel2.value;
+            reel3.textContent = manualReel3.value === 'random' ? getRandomSymbol() : manualReel3.value;
+
+            if (reel1.textContent === reel2.textContent && reel2.textContent === reel3.textContent) {
+                balance += bet * 10;
+                alert('You win!');
+            } else {
+                balance -= bet;
+            }
+
+            balanceInput.value = balance;
+
+            if (balance <= 0) {
+                alert('Game over!');
+                spinButton.disabled = true;
+            }
+        }
+
+        spinButton.addEventListener('click', spinReels);
+    </script>
+</body>
+
+</html>
