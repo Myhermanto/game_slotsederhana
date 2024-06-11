@@ -27,8 +27,9 @@
         }
 
         .reels {
-            display: flex;
-            justify-content: space-around;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             margin-bottom: 20px;
         }
 
@@ -83,9 +84,15 @@
     <div class="slot-machine">
         <h1>Slot Game</h1>
         <div class="reels">
-            <div class="reel" id="reel1">🍒</div>
-            <div class="reel" id="reel2">🍋</div>
-            <div class="reel" id="reel3">🍉</div>
+            <div class="reel" id="reel1-1">🍒</div>
+            <div class="reel" id="reel1-2">🍋</div>
+            <div class="reel" id="reel1-3">🍉</div>
+            <div class="reel" id="reel2-1">🍒</div>
+            <div class="reel" id="reel2-2">🍋</div>
+            <div class="reel" id="reel2-3">🍉</div>
+            <div class="reel" id="reel3-1">🍒</div>
+            <div class="reel" id="reel3-2">🍋</div>
+            <div class="reel" id="reel3-3">🍉</div>
         </div>
         <div class="controls">
             <button id="spinButton">SPIN</button>
@@ -100,7 +107,7 @@
         </div>
         <div class="manual-controls">
             <h2>Manual Win Settings</h2>
-            <select id="manualReel1">
+            <select id="manualReel1-1">
                 <option value="random">Random</option>
                 <option value="🍒">🍒</option>
                 <option value="🍋">🍋</option>
@@ -108,7 +115,7 @@
                 <option value="🍇">🍇</option>
                 <option value="🍓">🍓</option>
             </select>
-            <select id="manualReel2">
+            <select id="manualReel1-2">
                 <option value="random">Random</option>
                 <option value="🍒">🍒</option>
                 <option value="🍋">🍋</option>
@@ -116,7 +123,55 @@
                 <option value="🍇">🍇</option>
                 <option value="🍓">🍓</option>
             </select>
-            <select id="manualReel3">
+            <select id="manualReel1-3">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel2-1">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel2-2">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel2-3">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel3-1">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel3-2">
+                <option value="random">Random</option>
+                <option value="🍒">🍒</option>
+                <option value="🍋">🍋</option>
+                <option value="🍉">🍉</option>
+                <option value="🍇">🍇</option>
+                <option value="🍓">🍓</option>
+            </select>
+            <select id="manualReel3-3">
                 <option value="random">Random</option>
                 <option value="🍒">🍒</option>
                 <option value="🍋">🍋</option>
@@ -129,16 +184,20 @@
 
     <script>
         const symbols = ['🍒', '🍋', '🍉', '🍇', '🍓'];
-        const reel1 = document.getElementById('reel1');
-        const reel2 = document.getElementById('reel2');
-        const reel3 = document.getElementById('reel3');
+        const reels = [
+            ['reel1-1', 'reel1-2', 'reel1-3'],
+            ['reel2-1', 'reel2-2', 'reel2-3'],
+            ['reel3-1', 'reel3-2', 'reel3-3']
+        ].map(row => row.map(id => document.getElementById(id)));
         const spinButton = document.getElementById('spinButton');
         const betInput = document.getElementById('bet');
         const balanceInput = document.getElementById('balance');
 
-        const manualReel1 = document.getElementById('manualReel1');
-        const manualReel2 = document.getElementById('manualReel2');
-        const manualReel3 = document.getElementById('manualReel3');
+        const manualReels = [
+            'manualReel1-1', 'manualReel1-2', 'manualReel1-3',
+            'manualReel2-1', 'manualReel2-2', 'manualReel2-3',
+            'manualReel3-1', 'manualReel3-2', 'manualReel3-3'
+        ].map(id => document.getElementById(id));
 
         function getRandomSymbol() {
             return symbols[Math.floor(Math.random() * symbols.length)];
@@ -153,11 +212,14 @@
                 return;
             }
 
-            reel1.textContent = manualReel1.value === 'random' ? getRandomSymbol() : manualReel1.value;
-            reel2.textContent = manualReel2.value === 'random' ? getRandomSymbol() : manualReel2.value;
-            reel3.textContent = manualReel3.value === 'random' ? getRandomSymbol() : manualReel3.value;
+            for (let row = 0; row < reels.length; row++) {
+                for (let col = 0; col < reels[row].length; col++) {
+                    const manualReel = manualReels[row * 3 + col];
+                    reels[row][col].textContent = manualReel.value === 'random' ? getRandomSymbol() : manualReel.value;
+                }
+            }
 
-            if (reel1.textContent === reel2.textContent && reel2.textContent === reel3.textContent) {
+            if (checkWin()) {
                 balance += bet * 10;
                 alert('You win!');
             } else {
@@ -170,6 +232,27 @@
                 alert('Game over!');
                 spinButton.disabled = true;
             }
+        }
+
+        function checkWin() {
+            const winPatterns = [
+                // Horizontal
+                [reels[0][0], reels[0][1], reels[0][2]],
+                [reels[1][0], reels[1][1], reels[1][2]],
+                [reels[2][0], reels[2][1], reels[2][2]],
+                // Vertical
+                [reels[0][0], reels[1][0], reels[2][0]],
+                [reels[0][1], reels[1][1], reels[2][1]],
+                [reels[0][2], reels[1][2], reels[2][2]],
+                // Diagonal
+                [reels[0][0], reels[1][1], reels[2][2]],
+                [reels[0][2], reels[1][1], reels[2][0]]
+            ];
+
+            return winPatterns.some(pattern => {
+                return pattern[0].textContent === pattern[1].textContent &&
+                    pattern[1].textContent === pattern[2].textContent;
+            });
         }
 
         spinButton.addEventListener('click', spinReels);
